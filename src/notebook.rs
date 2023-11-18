@@ -12,18 +12,18 @@ pub use notification_params::*;
 #[serde(rename_all = "camelCase")]
 pub struct NotebookDocument {
     /// The notebook document's URI.
-    uri: Url,
+    pub uri: Url,
     /// The type of the notebook.
-    notebook_type: String,
+    pub notebook_type: String,
     /// The version number of this document (it will increase after each
     /// change, including undo/redo).
-    version: i32,
+    pub version: i32,
     /// Additional metadata stored with the notebook
     /// document.
     #[serde(skip_serializing_if = "Option::is_none")]
-    metadata: Option<LSPObject>,
+    pub metadata: Option<LSPObject>,
     /// The cells of a notebook.
-    cells: Vec<NotebookCell>,
+    pub cells: Vec<NotebookCell>,
 }
 
 /// A notebook cell.
@@ -37,16 +37,16 @@ pub struct NotebookDocument {
 #[serde(rename_all = "camelCase")]
 pub struct NotebookCell {
     /// The cell's kind
-    kind: NotebookCellKind,
+    pub kind: NotebookCellKind,
     /// The URI of the cell's text document content.
-    document: Url,
+    pub document: Url,
     /// Additional metadata stored with the cell.
     #[serde(skip_serializing_if = "Option::is_none")]
-    metadata: Option<LSPObject>,
+    pub metadata: Option<LSPObject>,
     /// Additional execution summary information
     /// if supported by the client.
     #[serde(skip_serializing_if = "Option::is_none")]
-    execution_summary: Option<ExecutionSummary>,
+    pub execution_summary: Option<ExecutionSummary>,
 }
 
 #[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
@@ -55,11 +55,11 @@ pub struct ExecutionSummary {
     /// A strict monotonically increasing value
     /// indicating the execution order of a cell
     /// inside a notebook.
-    execution_order: u32,
+    pub execution_order: u32,
     /// Whether the execution was successful or
     /// not if known by the client.
     #[serde(skip_serializing_if = "Option::is_none")]
-    success: Option<bool>,
+    pub success: Option<bool>,
 }
 
 #[derive(Debug, Eq, PartialEq, Clone, Serialize_repr, Deserialize_repr)]
@@ -118,11 +118,11 @@ pub struct NotebookDocumentSyncClientCapabilities {
 #[serde(rename_all = "camelCase")]
 pub struct NotebookDocumentSyncOptions {
     /// The notebooks to be synced
-    notebook_selector: Vec<NotebookSelector>,
+    pub notebook_selector: Vec<NotebookSelector>,
     /// Whether save notification should be forwarded to
     /// the server. Will only be honored if mode === `notebook`.
     #[serde(skip_serializing_if = "Option::is_none")]
-    save: Option<bool>,
+    pub save: Option<bool>,
 }
 
 /// Registration options specific to a notebook.
@@ -132,15 +132,15 @@ pub struct NotebookDocumentSyncOptions {
 #[serde(rename_all = "camelCase")]
 pub struct NotebookDocumentSyncRegistrationOptions {
     /// The notebooks to be synced
-    notebook_selector: Vec<NotebookSelector>,
+    pub notebook_selector: Vec<NotebookSelector>,
     /// Whether save notification should be forwarded to
     /// the server. Will only be honored if mode === `notebook`.
     #[serde(skip_serializing_if = "Option::is_none")]
-    save: Option<bool>,
+    pub save: Option<bool>,
     /// The id used to register the request. The id can be used to deregister
     /// the request again. See also Registration#id.
     #[serde(skip_serializing_if = "Option::is_none")]
-    id: Option<String>,
+    pub id: Option<String>,
 }
 
 /// A notebook cell text document filter denotes a cell text
@@ -154,13 +154,13 @@ pub struct NotebookCellTextDocumentFilter {
     /// containing the notebook cell. If a string
     /// value is provided it matches against the
     /// notebook type. '*' matches every notebook.
-    notebook: Notebook,
+    pub notebook: Notebook,
     /// A language id like `python`.
     ///
     /// Will be matched against the language id of the
     /// notebook cell document. '*' matches every language.
     #[serde(skip_serializing_if = "Option::is_none")]
-    language: Option<String>,
+    pub language: Option<String>,
 }
 
 /// Selects the notebook cells to be synced
@@ -171,16 +171,16 @@ pub struct NotebookSelector {
     /// value is provided it matches against the
     /// notebook type. '*' matches every notebook.
     #[serde(skip_serializing_if = "Option::is_none")]
-    notebook: Option<Notebook>,
+    pub notebook: Option<Notebook>,
     /// The cells of the matching notebook to be synced.
     #[serde(skip_serializing_if = "Option::is_none")]
-    cells: Option<Vec<NotebookCellSelector>>,
+    pub cells: Option<Vec<NotebookCellSelector>>,
 }
 
 #[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NotebookCellSelector {
-    language: String,
+    pub language: String,
 }
 
 #[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
@@ -199,13 +199,13 @@ pub enum Notebook {
 pub struct NotebookDocumentFilter {
     /// The type of the enclosing notebook.
     #[serde(skip_serializing_if = "Option::is_none")]
-    notebook_type: Option<String>,
+    pub notebook_type: Option<String>,
     /// A Uri [scheme](#Uri.scheme), like `file` or `untitled`.
     #[serde(skip_serializing_if = "Option::is_none")]
-    scheme: Option<String>,
+    pub scheme: Option<String>,
     /// A glob pattern.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pattern: Option<String>,
+    pub pattern: Option<String>,
 }
 
 mod notification_params {
@@ -225,10 +225,10 @@ mod notification_params {
     #[serde(rename_all = "camelCase")]
     pub struct DidOpenNotebookDocumentParams {
         /// The notebook document that got opened.
-        notebook_document: NotebookDocument,
+        pub notebook_document: NotebookDocument,
         /// The text documents that represent the content
         /// of a notebook cell.
-        cell_text_documents: Vec<TextDocumentItem>,
+        pub cell_text_documents: Vec<TextDocumentItem>,
     }
 
     /// The params sent in a change notebook document notification.
@@ -239,7 +239,7 @@ mod notification_params {
     pub struct DidChangeNotebookDocumentParams {
         /// The notebook document that did change. The version number points
         /// to the version after all provided changes have been applied.
-        notebook_document: VersionedNotebookDocumentIdentifier,
+        pub notebook_document: VersionedNotebookDocumentIdentifier,
 
         /// The actual changes to the notebook document.
         ///
@@ -252,7 +252,7 @@ mod notification_params {
         /// - start with the same initial content
         /// - apply the 'notebookDocument/didChange' notifications in the order
         ///   you receive them.
-        change: NotebookDocumentChangeEvent,
+        pub change: NotebookDocumentChangeEvent,
     }
 
     /// A versioned notebook document identifier.
@@ -262,9 +262,9 @@ mod notification_params {
     #[serde(rename_all = "camelCase")]
     pub struct VersionedNotebookDocumentIdentifier {
         /// The version number of this notebook document.
-        version: i32,
+        pub version: i32,
         /// The notebook document's URI.
-        uri: Url,
+        pub uri: Url,
     }
 
     /// A change event for a notebook document.
@@ -275,11 +275,11 @@ mod notification_params {
     pub struct NotebookDocumentChangeEvent {
         /// The changed meta data if any.
         #[serde(skip_serializing_if = "Option::is_none")]
-        metadata: Option<LSPObject>,
+        pub metadata: Option<LSPObject>,
 
         /// Changes to cells
         #[serde(skip_serializing_if = "Option::is_none")]
-        cells: Option<NotebookDocumentCellChange>,
+        pub cells: Option<NotebookDocumentCellChange>,
     }
 
     #[derive(Debug, Eq, PartialEq, Clone, Serialize, Deserialize)]
@@ -288,36 +288,36 @@ mod notification_params {
         /// Changes to the cell structure to add or
         /// remove cells.
         #[serde(skip_serializing_if = "Option::is_none")]
-        structure: Option<NotebookDocumentCellChangeStructure>,
+        pub structure: Option<NotebookDocumentCellChangeStructure>,
 
         /// Changes to notebook cells properties like its
         /// kind, execution summary or metadata.
         #[serde(skip_serializing_if = "Option::is_none")]
-        data: Option<Vec<NotebookCell>>,
+        pub data: Option<Vec<NotebookCell>>,
 
         /// Changes to the text content of notebook cells.
         #[serde(skip_serializing_if = "Option::is_none")]
-        text_content: Option<Vec<NotebookDocumentChangeTextContent>>,
+        pub text_content: Option<Vec<NotebookDocumentChangeTextContent>>,
     }
 
     #[derive(Debug, Eq, PartialEq, Clone, Serialize, Deserialize)]
     #[serde(rename_all = "camelCase")]
     pub struct NotebookDocumentChangeTextContent {
-        document: VersionedTextDocumentIdentifier,
-        changes: Vec<TextDocumentContentChangeEvent>,
+        pub document: VersionedTextDocumentIdentifier,
+        pub changes: Vec<TextDocumentContentChangeEvent>,
     }
 
     #[derive(Debug, Eq, PartialEq, Clone, Serialize, Deserialize)]
     #[serde(rename_all = "camelCase")]
     pub struct NotebookDocumentCellChangeStructure {
         /// The change to the cell array.
-        array: NotebookCellArrayChange,
+        pub array: NotebookCellArrayChange,
         /// Additional opened cell text documents.
         #[serde(skip_serializing_if = "Option::is_none")]
-        did_open: Option<Vec<TextDocumentItem>>,
+        pub did_open: Option<Vec<TextDocumentItem>>,
         /// Additional closed cell text documents.
         #[serde(skip_serializing_if = "Option::is_none")]
-        did_close: Option<Vec<TextDocumentIdentifier>>,
+        pub did_close: Option<Vec<TextDocumentIdentifier>>,
     }
 
     /// A change describing how to move a `NotebookCell`
@@ -328,14 +328,14 @@ mod notification_params {
     #[serde(rename_all = "camelCase")]
     pub struct NotebookCellArrayChange {
         /// The start offset of the cell that changed.
-        start: u32,
+        pub start: u32,
 
         /// The deleted cells
-        delete_count: u32,
+        pub delete_count: u32,
 
         /// The new cells, if any
         #[serde(skip_serializing_if = "Option::is_none")]
-        cells: Option<Vec<NotebookCell>>,
+        pub cells: Option<Vec<NotebookCell>>,
     }
 
     /// The params sent in a save notebook document notification.
@@ -345,7 +345,7 @@ mod notification_params {
     #[serde(rename_all = "camelCase")]
     pub struct DidSaveNotebookDocumentParams {
         /// The notebook document that got saved.
-        notebook_document: NotebookDocumentIdentifier,
+        pub notebook_document: NotebookDocumentIdentifier,
     }
 
     /// A literal to identify a notebook document in the client.
@@ -355,7 +355,7 @@ mod notification_params {
     #[serde(rename_all = "camelCase")]
     pub struct NotebookDocumentIdentifier {
         /// The notebook document's URI.
-        uri: Url,
+        pub uri: Url,
     }
 
     /// The params sent in a close notebook document notification.
@@ -365,10 +365,10 @@ mod notification_params {
     #[serde(rename_all = "camelCase")]
     pub struct DidCloseNotebookDocumentParams {
         /// The notebook document that got closed.
-        notebook_document: NotebookDocumentIdentifier,
+        pub notebook_document: NotebookDocumentIdentifier,
 
         /// The text documents that represent the content
         /// of a notebook cell that got closed.
-        cell_text_documents: Vec<TextDocumentIdentifier>,
+        pub cell_text_documents: Vec<TextDocumentIdentifier>,
     }
 }
