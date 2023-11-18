@@ -46,12 +46,12 @@ pub struct NotebookCell {
     /// Additional execution summary information
     /// if supported by the client.
     #[serde(skip_serializing_if = "Option::is_none")]
-    execution_summary: Option<NotebookExecutionSummary>,
+    execution_summary: Option<ExecutionSummary>,
 }
 
 #[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct NotebookExecutionSummary {
+pub struct ExecutionSummary {
     /// A strict monotonically increasing value
     /// indicating the execution order of a cell
     /// inside a notebook.
@@ -280,15 +280,6 @@ mod notification_params {
         /// Changes to cells
         #[serde(skip_serializing_if = "Option::is_none")]
         cells: Option<NotebookDocumentCellChange>,
-
-        /// Changes to notebook cells properties like its
-        /// kind, execution summary or metadata.
-        #[serde(skip_serializing_if = "Option::is_none")]
-        data: Option<Vec<NotebookCell>>,
-
-        /// Changes to the text content of notebook cells.
-        #[serde(skip_serializing_if = "Option::is_none")]
-        text_content: Option<Vec<NotebookDocumentChangeTextContent>>,
     }
 
     #[derive(Debug, Eq, PartialEq, Clone, Serialize, Deserialize)]
@@ -298,6 +289,15 @@ mod notification_params {
         /// remove cells.
         #[serde(skip_serializing_if = "Option::is_none")]
         structure: Option<NotebookDocumentCellChangeStructure>,
+
+        /// Changes to notebook cells properties like its
+        /// kind, execution summary or metadata.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        data: Option<Vec<NotebookCell>>,
+
+        /// Changes to the text content of notebook cells.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        text_content: Option<Vec<NotebookDocumentChangeTextContent>>,
     }
 
     #[derive(Debug, Eq, PartialEq, Clone, Serialize, Deserialize)]
