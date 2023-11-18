@@ -1601,7 +1601,7 @@ pub struct ClientCapabilities {
     ///
     /// @since 3.17.0
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub notebook_document: Option<NotebookClientCapabilities>,
+    pub notebook_document: Option<NotebookDocumentClientCapabilities>,
 
     /// Window specific client capabilities.
     #[serde(skip_serializing_if = "Option::is_none")]

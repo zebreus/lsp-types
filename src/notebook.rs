@@ -76,11 +76,11 @@ pub enum NotebookCellKind {
 /// @since 3.17.0
 #[derive(Debug, Eq, PartialEq, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct NotebookClientCapabilities {
+pub struct NotebookDocumentClientCapabilities {
     /// Capabilities specific to notebook document synchronization
     ///
     /// @since 3.17.0
-    pub completion: NotebookDocumentSyncClientCapabilities,
+    pub synchronization: NotebookDocumentSyncClientCapabilities,
 }
 
 /// Notebook specific client capabilities.
@@ -163,35 +163,18 @@ pub struct NotebookCellTextDocumentFilter {
     language: Option<String>,
 }
 
-#[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
-#[serde(untagged)]
-pub enum NotebookSelector {
-    ByNotebook(NotebookSelectorByNotebook),
-    ByCells(NotebookSelectorByCells),
-}
-
+/// Selects the notebook cells to be synced
 #[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct NotebookSelectorByNotebook {
-    /// The notebook to be synced. If a string
-    /// value is provided it matches against the
-    /// notebook type. '*' matches every notebook.
-    notebook: Notebook,
-    /// The cells of the matching notebook to be synced.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    cells: Option<Vec<NotebookCellSelector>>,
-}
-
-#[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct NotebookSelectorByCells {
+pub struct NotebookSelector {
     /// The notebook to be synced. If a string
     /// value is provided it matches against the
     /// notebook type. '*' matches every notebook.
     #[serde(skip_serializing_if = "Option::is_none")]
     notebook: Option<Notebook>,
     /// The cells of the matching notebook to be synced.
-    cells: Vec<NotebookCellSelector>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    cells: Option<Vec<NotebookCellSelector>>,
 }
 
 #[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
@@ -207,55 +190,13 @@ pub enum Notebook {
     NotebookDocumentFilter(NotebookDocumentFilter),
 }
 
-#[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
-#[serde(untagged)]
-pub enum NotebookDocumentFilter {
-    ByType(NotebookDocumentFilterByType),
-    ByScheme(NotebookDocumentFilterByScheme),
-    ByPattern(NotebookDocumentFilterByPattern),
-}
-
 /// A notebook document filter denotes a notebook document by
 /// different properties.
 ///
 /// @since 3.17.0
 #[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct NotebookDocumentFilterByType {
-    /// The type of the enclosing notebook.
-    notebook_type: String,
-    /// A Uri [scheme](#Uri.scheme), like `file` or `untitled`.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    scheme: Option<String>,
-    /// A glob pattern.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pattern: Option<String>,
-}
-
-/// A notebook document filter denotes a notebook document by
-/// different properties.
-///
-/// @since 3.17.0
-#[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct NotebookDocumentFilterByScheme {
-    /// The type of the enclosing notebook.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    notebook_type: Option<String>,
-    /// A Uri [scheme](#Uri.scheme), like `file` or `untitled`.
-    scheme: String,
-    /// A glob pattern.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pattern: Option<String>,
-}
-
-/// A notebook document filter denotes a notebook document by
-/// different properties.
-///
-/// @since 3.17.0
-#[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct NotebookDocumentFilterByPattern {
+pub struct NotebookDocumentFilter {
     /// The type of the enclosing notebook.
     #[serde(skip_serializing_if = "Option::is_none")]
     notebook_type: Option<String>,
@@ -263,7 +204,8 @@ pub struct NotebookDocumentFilterByPattern {
     #[serde(skip_serializing_if = "Option::is_none")]
     scheme: Option<String>,
     /// A glob pattern.
-    pattern: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pattern: Option<String>,
 }
 
 mod notification_params {
